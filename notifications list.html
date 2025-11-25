@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(to bottom right,#2575fc, #6a11cb);
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #fff;
+}
+
+/* Notifications Container */
+#notifications-container {
+  width: 100%;
+  max-width: 400px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+}
+
+#notifications-container:hover {
+  transform: translateY(-5px);
+}
+
+/* Header */
+#notifications-container h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Mark All as Read Button */
+#mark-all-read {
+  background-color: #8a2be2;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+  transition: background 0.4s, transform 0.3s;
+  margin-bottom: 15px;
+}
+
+#mark-all-read:hover {
+  background: #6a0dad;
+  transform: scale(1.03);
+}
+
+/* Notification List */
+#notifications-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Notification Item */
+.notification-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background 0.3s, transform 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.notification-item.unread {
+  border-left: 4px solid #ffcc00;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.notification-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+/* Sender Picture */
+.sender-pic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 3px solid #fff;
+  transition: transform 0.3s;
+}
+
+.sender-pic:hover {
+  transform: scale(1.1);
+}
+
+/* Notification Content */
+.notification-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.message {
+  font-size: 15px;
+  font-weight: bold;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.time {
+  font-size: 12px;
+  color: #e0e0e0;
+}
+
+/* Actions */
+.notification-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mark-as-read,
+.link {
+  background: transparent;
+  color: #8a2be2;
+  border: 1px solid #8a2be2;
+  padding: 6px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: bold;
+}
+
+.mark-as-read:hover,
+.link:hover {
+  background-color: #8a2be2;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Notification Badge (Optional) */
+.notification-item.unread::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 10px;
+  height: 10px;
+  background: #ffcc00;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+    </style>
+</head>
+<body>
+    <div id="notifications-container">
+        <h3>🔔 Notifications</h3>
+        <button id="mark-all-read">✔️ Mark All as Read</button>
+        <ul id="notifications-list">
+          <li class="notification-item unread">
+            <img src="uploads/1739032033_276ab62397dd46594965c5af0854b018.jpg" alt="Sender" class="sender-pic" />
+            <div class="notification-content">
+              <strong class="message">You have a new message from Alex.</strong>
+              <small class="time">2 mins ago</small>
+            </div>
+            <div class="notification-actions">
+              <button class="mark-as-read">Mark as Read</button>
+              <a href="#" class="link">View</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+</body>
+</html>

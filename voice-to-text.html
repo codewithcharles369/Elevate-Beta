@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vn</title>
+    <style>
+        /* Voice-to-Text Post Section */
+.voice-to-text-post {
+    background: linear-gradient(135deg, #4B0082, #8A2BE2);
+    color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    margin: 20px 0;
+}
+
+/* Buttons */
+#startRecording {
+    background: #FFD700;
+    color: #4B0082;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 10px;
+}
+
+#startRecording:hover {
+    background: #FFB800;
+}
+
+/* Recording Status */
+#recordingStatus {
+    font-style: italic;
+    color: #FFD700;
+    margin-top: 10px;
+}
+    </style>
+</head>
+<body>
+    <section class="voice-to-text-post">
+        <h2>🎤 Create Post with Voice</h2>
+        <form id="voicePostForm">
+            <input type="text" name="title" placeholder="Post Title" required>
+            <textarea id="postContent" name="content" placeholder="Start speaking or type your post..." required></textarea>
+            <button type="button" id="startRecording">🎙️ Start Voice Input</button>
+            <button type="submit">Publish Post</button>
+        </form>
+        <p id="recordingStatus" style="display: none;">🎧 Listening...</p>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const startRecordingBtn = document.getElementById("startRecording");
+    const postContent = document.getElementById("postContent");
+    const recordingStatus = document.getElementById("recordingStatus");
+
+    // Check if SpeechRecognition is supported
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = true; // Enable real-time transcription
+        recognition.continuous = true;     // Keep listening until manually stopped
+
+        let isRecording = false;
+        let finalTranscript = ""; // Store the final confirmed transcript
+
+        // Toggle voice input on button click
+        startRecordingBtn.addEventListener("click", () => {
+            if (!isRecording) {
+                recognition.start();
+                recordingStatus.style.display = "block";
+                startRecordingBtn.textContent = "🛑 Stop Voice Input";
+                isRecording = true;
+            } else {
+                recognition.stop();
+                recordingStatus.style.display = "none";
+                startRecordingBtn.textContent = "🎙️ Start Voice Input";
+                isRecording = false;
+            }
+        });
+
+        // Handle the speech recognition result
+        recognition.addEventListener("result", (event) => {
+            let interimTranscript = ""; // Temporary transcript for real-time results
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript + " "; // Append final results
+                } else {
+                    interimTranscript += transcript; // Show interim results while speaking
+                }
+            }
+
+            // Combine final and interim transcripts in the textarea
+            postContent.value = finalTranscript + interimTranscript;
+        });
+
+        // Ensure recognition auto-restarts if interrupted
+        recognition.addEventListener("end", () => {
+            if (isRecording) {
+                recognition.start(); // Restart if still recording
+            }
+        });
+    } else {
+        startRecordingBtn.disabled = true;
+        startRecordingBtn.textContent = "🎙️ Voice Input Not Supported";
+        console.warn("SpeechRecognition is not supported in this browser.");
+    }
+});
+    </script>
+</body>
+</html>

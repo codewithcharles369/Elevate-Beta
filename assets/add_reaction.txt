@@ -1,0 +1,27 @@
+<?php
+include 'includes/db.php';
+session_start();
+
+$user_id = $_SESSION['user_id'];
+$data = json_decode(file_get_contents('php://input'), true);
+
+$message_id = $data['message_id'];
+$reaction = $data['reaction'];
+
+// Check if the user has already reacted to the message
+$stmt = $pdo->prepare("SELECT * FROM message_reactions WHERE message_id = ? AND user_id = ?");
+$stmt->execute([$message_id, $user_id]);
+$existing_reaction = $stmt->fetch();
+
+if ($existing_reaction) {
+    // Update the reaction if it already exists
+    $stmt = $pdo->prepare("UPDATE message_reactions SET reaction = ? WHERE message_id = ? AND user_id = ?");
+    $stmt->execute([$reaction, $message_id, $user_id]);
+} else {
+    // Add a new reaction
+    $stmt = $pdo->prepare("INSERT INTO message_reactions (message_id, user_id, reaction) VALUES (?, ?, ?)");
+    $stmt->execute([$message_id, $user_id, $reaction]);
+}
+
+echo json_encode(['success' => true]);
+?>

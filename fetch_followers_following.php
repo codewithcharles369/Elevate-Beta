@@ -1,0 +1,44 @@
+<?php
+require 'includes/db.php';
+session_start();
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    // Fetch followers
+    $stmt = $pdo->prepare("SELECT COUNT(*) AS followers_count FROM follows WHERE following_id = ?");
+    $stmt->execute([$user_id]);
+    $followers_count = $stmt->fetch(PDO::FETCH_ASSOC)['followers_count'];
+
+    // Fetch following
+    $stmt = $pdo->prepare("SELECT COUNT(*) AS following_count FROM follows WHERE follower_id = ?");
+    $stmt->execute([$user_id]);
+    $following_count = $stmt->fetch(PDO::FETCH_ASSOC)['following_count'];
+
+    // Fetch followers list
+    $stmt = $pdo->prepare("SELECT u.id, u.name ,u.profile_picture
+                           FROM follows f
+                           JOIN users u ON f.follower_id = u.id
+                           WHERE f.following_id = ?");
+    $stmt->execute([$user_id]);
+    $followers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch following list
+    $stmt = $pdo->prepare("SELECT u.id, u.name ,u.profile_picture
+                           FROM follows f
+                           JOIN users u ON f.following_id = u.id
+                           WHERE f.follower_id = ?");
+    $stmt->execute([$user_id]);
+    $following = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode([
+        'success' => true,
+        'followers_count' => $followers_count,
+        'following_count' => $following_count,
+        'followers' => $followers,
+        'following' => $following
+    ]);
+} else {
+    echo json_encode(['success' => false, 'message' => 'Not logged in.']);
+}
+?>

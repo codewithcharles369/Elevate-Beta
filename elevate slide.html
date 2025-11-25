@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevate: Empowering Creativity</title>
+    <style>
+        /* General reset for margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            position: fixed;
+            left: -250px; /* Initially off-screen */
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #5e3f8d; /* Purple theme */
+            color: white;
+            transition: left 0.3s ease;
+            padding: 20px;
+            z-index: 1000;
+            box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar.open {
+            left: 0; /* When open, the sidebar slides in */
+        }
+
+        /* Sidebar Links */
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #7741a0;
+        }
+
+        /* Overlay effect */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Content area */
+        #content {
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Button to toggle the sidebar */
+        #menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 28px;
+            background-color: #5e3f8d; /* Purple theme */
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            z-index: 1001;
+        }
+
+        #menu-btn:hover {
+            background-color: #7741a0;
+        }
+
+        /* Heading and Explanation */
+        h1, h2 {
+            color: #5e3f8d; /* Purple theme */
+        }
+
+        .explanation {
+            margin-top: 40px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .explanation ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .explanation li {
+            margin-bottom: 10px;
+        }
+
+        /* Mobile-friendly styling */
+        @media (max-width: 768px) {
+            #menu-btn {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <h2>Elevate</h2>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Features</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Main content -->
+    <div id="content">
+        <button id="menu-btn">☰ Open Sidebar</button>
+
+        <h1>Welcome to Elevate</h1>
+        <p>Elevate is a platform that empowers students and individuals to share their creative ideas, brainstorm, and learn from one another. We foster a supportive community where you can post, share, like, and comment to inspire self-growth and collaboration.</p>
+
+        <h2>About Elevate</h2>
+        <p>Our mission is to provide an engaging space for students to collaborate, grow, and learn. We aim to cultivate creativity through shared knowledge and provide a platform where users can freely express themselves and support each other's growth.</p>
+
+        <div class="explanation">
+            <h2>How Elevate Works:</h2>
+            <ul>
+                <li><strong>Create & Share Posts:</strong> Users can create posts, share them, and receive feedback from the community to help grow their ideas.</li>
+                <li><strong>Like & Comment:</strong> Interact with posts by liking and commenting, fostering discussions that encourage self-growth.</li>
+                <li><strong>Notifications:</strong> Stay updated with real-time notifications on new posts, comments, and interactions from your network.</li>
+                <li><strong>Groups & Collaboration:</strong> Elevate also supports collaborative work through group-based interactions, allowing users to share ideas and learn together.</li>
+                <li><strong>Gamification:</strong> Earn points, level up, and unlock achievements by posting and engaging with the platform.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+        const menuBtn = document.getElementById('menu-btn');
+        const overlay = document.getElementById('overlay');
+
+        // Touch event variables for swipe detection
+        let startX;
+
+        // Detect touch start (when user starts swiping)
+        content.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        // Detect touch move (when user swipes)
+        content.addEventListener('touchmove', (e) => {
+            let diffX = e.touches[0].clientX - startX;
+            if (diffX > 50) {
+                // If swipe right is detected, open the sidebar
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+            } else if (diffX < -50) {
+                // If swipe left is detected, close the sidebar
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            }
+        });
+
+        // Reset swipe detection after touch ends
+        content.addEventListener('touchend', () => {
+            startX = null;
+        });
+
+        // Button to open/close sidebar
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        });
+
+        // Close sidebar if the overlay is clicked
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+    </script>
+</body>
+</html>
